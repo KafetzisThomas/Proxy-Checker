@@ -6,6 +6,7 @@
 # License: GPLv3
 # NOTE: By contributing to this project, you agree to the terms of the GPLv3 license, and agree to grant the project owner the right to also provide or sell this software, including your contribution, to anyone under any other license, with no compensation to you.
 
+import os
 import sys
 import socket
 import urllib.request
@@ -44,6 +45,12 @@ def is_bad_proxy(proxy):
     return False
 
 
+def create_logs(filename, proxy):
+    os.makedirs("logs", exist_ok=True)
+    with open(f"logs/{filename}", "a") as file:
+        file.write(f"{proxy}\n")
+
+
 def main():
     # Set a timeout to avoid hanging on slow proxies
     socket.setdefaulttimeout(120)
@@ -52,8 +59,10 @@ def main():
     for proxy in proxyList:
         if is_bad_proxy(proxy):
             print(f"{proxy} isn't working")
+            create_logs("bad_proxies.txt", proxy)
         else:
             print(f"{proxy} is working")
+            create_logs("good_proxies.txt", proxy)
 
 
 if __name__ == "__main__":
