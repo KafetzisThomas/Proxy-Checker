@@ -11,6 +11,9 @@ import sys
 import socket
 import urllib.request
 import urllib.error
+from colorama import init, Fore as F
+
+init(autoreset=True)
 
 
 def read_text_file():
@@ -19,10 +22,10 @@ def read_text_file():
         with open(filepath, "r") as file:
             content = file.read().splitlines()
     except IndexError:
-        print("Usage: python3 main.py <filepath>")
+        print(f"{F.LIGHTYELLOW_EX}Usage: python3 main.py <filepath>")
         sys.exit()
     except FileNotFoundError:
-        print(f"Error: The file '{filepath}' was not found.")
+        print(f"{F.LIGHTRED_EX}Error: The file '{filepath}' was not found.")
         sys.exit()
     return content
 
@@ -58,10 +61,10 @@ def main():
     proxyList = read_text_file()
     for proxy in proxyList:
         if is_bad_proxy(proxy):
-            print(f"{proxy} isn't working")
+            print(f"{proxy} {F.LIGHTRED_EX}isn't working")
             create_logs("bad_proxies.txt", proxy)
         else:
-            print(f"{proxy} is working")
+            print(f"{proxy} {F.LIGHTGREEN_EX}is working")
             create_logs("good_proxies.txt", proxy)
 
 
